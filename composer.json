@@ -1,0 +1,33 @@
+{
+    "name": "s1k3/livewire-v4-patch",
+    "description": "Livewire V4 patch for class component to mfc conversion and incomplete livewire tags",
+    "type": "library",
+    "minimum-stability": "dev",
+    "license": "BSD",
+    "keywords": [
+        "livewire",
+        "v4",
+        "patch"
+    ],
+    "authors": [
+        {
+            "name": "Robin Khan",
+            "email": "sk118420@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "LivewireV4\\": "src/"
+        }
+    },
+    "require": {
+        "php": "^8.2"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "LivewireV4\\LivewireV4PatchServiceProvider"
+            ]
+        }
+    }
+}
