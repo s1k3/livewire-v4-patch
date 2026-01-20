@@ -2,5 +2,5 @@
 
 return [
     'excluded_directories' => [],
-    'view_path' => base_path('resources/views')
+    'component_path' => base_path('app/Livewire')
 ];

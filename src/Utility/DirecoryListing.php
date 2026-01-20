@@ -2,9 +2,7 @@
 
 namespace LivewireV4\Utility;
 
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
-use Exception;
 use LivewireV4\Interface\Instance;
 
 class DirecoryListing implements Instance
@@ -25,11 +23,24 @@ class DirecoryListing implements Instance
     public function fileListings(): array
     {
         if($this->filePath === null){
-            $this->filePath = base_path('resources/views');
+            $this->filePath = config('laravel-v4-patch.component_path');
         }
 
-        dd(File::allFiles($this->filePath));
+        $files = File::allFiles($this->filePath);
 
-        return $excludedDirectories;
+        $output = [];
+        foreach($files as $file){
+            if(str()->of($file->getPath())->contains(config(['laravel-v4-patch.excluded_directories']))){
+                continue;
+            }
+
+            $output[] = [
+                "filename" => $file->getFilenameWithoutExtension(),
+                "realPath" => $file->getRealPath(),
+            ];
+
+        }
+
+        return $output;
     }
 }
