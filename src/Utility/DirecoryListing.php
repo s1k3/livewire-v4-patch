@@ -34,10 +34,7 @@ class DirecoryListing implements Instance
                 continue;
             }
 
-            $output[] = [
-                "filename" => $file->getFilenameWithoutExtension(),
-                "realPath" => $file->getRealPath(),
-            ];
+            $output[] = $file->getRealPath();
 
         }
 
