@@ -3,6 +3,7 @@
 namespace LivewireV4;
 
 use Illuminate\Support\ServiceProvider;
+use LivewireV4\Commands\ConvertToMultiFileComponent;
 
 class LivewireV4PatchServiceProvider extends ServiceProvider
 {
@@ -11,5 +12,12 @@ class LivewireV4PatchServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/config/laravel-v4-patch.php' => config_path('laravel-v4-patch.php'),
         ]);
+
+         if ($this->app->runningInConsole()) {
+            $this->commands([
+                ConvertToMultiFileComponent::class
+            ]);
+        }
+
     }
 }
