@@ -2,47 +2,49 @@
 
 namespace LivewireV4\Converter;
 
-use Illuminate\Support\Facades\Pipeline;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Pipeline;
 use LivewireV4\Converter\Adapters\ClassNameRemover;
 use LivewireV4\Converter\Adapters\InsertMount;
-use LivewireV4\Converter\Adapters\RemoveRender;
 use LivewireV4\Converter\Adapters\MoveCodeToMount;
 use LivewireV4\Converter\Adapters\NamespaceRemover;
+use LivewireV4\Converter\Adapters\RemoveRender;
 use LivewireV4\Interface\Instance;
 
 class ConversionManager implements Instance
 {
     private $filePath = null;
 
-    public static function make(): static {
+    public static function make(): static
+    {
         return new static;
     }
 
-    public function path($filePath){
+    public function path($filePath)
+    {
         $this->filePath = $filePath;
+
         return $this;
     }
 
-    public function convert(){
+    public function convert()
+    {
 
         $content = Pipeline::send(
             passable: File::get($this->filePath)
         )
-        ->through([
-            ClassNameRemover::class,
-            NamespaceRemover::class,
-            InsertMount::class,
-            MoveCodeToMount::class,
-            RemoveRender::class
-        ])
-        ->thenReturn();
+            ->through([
+                ClassNameRemover::class,
+                NamespaceRemover::class,
+                InsertMount::class,
+                MoveCodeToMount::class,
+                RemoveRender::class,
+            ])
+            ->thenReturn();
 
         $componentName = str()->of(File::name($this->filePath))->kebab()->toString();
 
         dd($content, $componentName);
 
     }
-
-
 }

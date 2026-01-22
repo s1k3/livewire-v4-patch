@@ -2,9 +2,9 @@
 
 namespace LivewireV4\Utility;
 
+use Exception;
 use Illuminate\Support\Facades\File;
 use LivewireV4\Interface\Instance;
-use Exception;
 
 class RenderedViewContent implements Instance
 {
@@ -12,36 +12,35 @@ class RenderedViewContent implements Instance
 
     public static function make(): Instance
     {
-        return new static();
+        return new static;
     }
 
-    public function path($filePath): static {
+    public function path($filePath): static
+    {
         $this->filePath = $filePath;
+
         return $this;
     }
 
     public function content(): string
     {
-        if($this->filePath === null){
-            throw new Exception("File path is not set.");
+        if ($this->filePath === null) {
+            throw new Exception('File path is not set.');
         }
 
         $content = File::get($this->filePath);
 
         $viewFile = str()->of($content)
-            ->after("render()")
-            ->after("{")
-            ->before("}")
-            ->after("view(")
-            ->before(")")
+            ->after('render()')
+            ->after('{')
+            ->before('}')
+            ->after('view(')
+            ->before(')')
             ->trim()
-            ->replace("'", "")
-            ->replace(".", "/")
-            ->append(".blade.php")
+            ->replace("'", '')
+            ->replace('.', '/')
+            ->append('.blade.php')
             ->toString();
-
-        
-
 
         return File::get(resource_path("views/{$viewFile}"));
     }

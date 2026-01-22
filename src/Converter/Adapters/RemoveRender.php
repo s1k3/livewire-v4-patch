@@ -3,39 +3,39 @@
 namespace LivewireV4\Converter\Adapters;
 
 use Closure;
-use PhpParser\ParserFactory;
-use PhpParser\NodeTraverser;
-use PhpParser\NodeVisitorAbstract;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\NodeFinder;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Return_;
+use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitorAbstract;
+use PhpParser\ParserFactory;
 use PhpParser\PrettyPrinter;
-use PhpParser\PrettyPrinter\Standard;
 
 class RemoveRender
 {
-    public function __invoke(string $content, Closure $next) : string
+    public function __invoke(string $content, Closure $next): string
     {
-        $parser = (new ParserFactory())->createForHostVersion();
+        $parser = (new ParserFactory)->createForHostVersion();
         $ast = $parser->parse($content);
 
-        $traverser = new NodeTraverser();
-        $traverser->addVisitor(new class extends NodeVisitorAbstract {
-            public function leaveNode(Node $node) {
+        $traverser = new NodeTraverser;
+        $traverser->addVisitor(new class extends NodeVisitorAbstract
+        {
+            public function leaveNode(Node $node)
+            {
                 if ($node instanceof Class_) {
 
-                    $node->stmts = array_filter($node->stmts, function($stmt) {
+                    $node->stmts = array_filter($node->stmts, function ($stmt) {
                         if ($stmt instanceof ClassMethod && $stmt->name->name === 'render') {
                             return false;
                         }
-                        return true; 
+
+                        return true;
                     });
-                    
+
                     $node->stmts = array_values($node->stmts);
                 }
-                
+
                 return $node;
             }
         });
@@ -43,7 +43,7 @@ class RemoveRender
         $modifiedAst = $traverser->traverse($ast);
 
         // Output the modified code
-        $prettyPrinter = new PrettyPrinter\Standard();
+        $prettyPrinter = new PrettyPrinter\Standard;
         $newCode = $prettyPrinter->prettyPrintFile($modifiedAst);
 
         return $next($newCode);

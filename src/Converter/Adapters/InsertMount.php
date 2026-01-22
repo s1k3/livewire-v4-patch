@@ -3,58 +3,58 @@
 namespace LivewireV4\Converter\Adapters;
 
 use Closure;
-use PhpParser\ParserFactory;
-use PhpParser\NodeTraverser;
-use PhpParser\NodeFinder;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\BuilderFactory;
-use PhpParser\Node\Stmt\Property;
 use PhpParser\Node;
-use PhpParser\PrettyPrinter\Standard;
 use PhpParser\Node\Stmt\Class_;
-
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Property;
+use PhpParser\NodeFinder;
+use PhpParser\NodeTraverser;
+use PhpParser\ParserFactory;
+use PhpParser\PrettyPrinter\Standard;
 
 class InsertMount
 {
     public function __invoke(string $content, Closure $next): string
     {
 
-        if(!str()->of($content)->contains("<?php")){
+        if (! str()->of($content)->contains('<?php')) {
             $content = "<?php $content";
         }
 
-        $parser = (new ParserFactory())->createForHostVersion();
+        $parser = (new ParserFactory)->createForHostVersion();
 
         $ast = $parser->parse($content);
 
+        $nodeFinder = new NodeFinder;
 
-        $nodeFinder = new NodeFinder();
-        
-        $existingMount = $nodeFinder->findFirst($ast, function(Node $node) {
+        $existingMount = $nodeFinder->findFirst($ast, function (Node $node) {
             return $node instanceof ClassMethod && $node->name->name === 'mount';
         });
-        
+
         if ($existingMount) {
             return $next($content);
         }
 
-        $builder = new BuilderFactory();
-        
+        $builder = new BuilderFactory;
+
         $mountMethod = $builder->method('mount')
             ->makePublic()
             ->addStmts([])
             ->getNode();
 
-        $traverser = new NodeTraverser();
-        $traverser->addVisitor(new class($mountMethod) extends \PhpParser\NodeVisitorAbstract {
+        $traverser = new NodeTraverser;
+        $traverser->addVisitor(new class($mountMethod) extends \PhpParser\NodeVisitorAbstract
+        {
             private $mountMethod;
-            
+
             public function __construct($mountMethod)
             {
                 $this->mountMethod = $mountMethod;
             }
-            
-            public function enterNode(Node $node) {
+
+            public function enterNode(Node $node)
+            {
                 if ($node instanceof Class_) {
 
                     $properties = [];
@@ -62,7 +62,7 @@ class InsertMount
 
                     foreach ($node->stmts as $stmt) {
 
-                        match(true){
+                        match (true) {
                             $stmt instanceof Property => $properties[] = $stmt,
                             default => $otherStmts[] = $stmt
                         };
@@ -70,20 +70,21 @@ class InsertMount
                     }
 
                     $node->stmts = [
-                        ... $properties,
+                        ...$properties,
                         $this->mountMethod,
-                        ... $otherStmts
+                        ...$otherStmts,
                     ];
                 }
+
                 return $node;
             }
         });
 
         $modifiedAst = $traverser->traverse($ast);
-        
-        $prettyPrinter = new Standard();
+
+        $prettyPrinter = new Standard;
         $newCode = $prettyPrinter->prettyPrintFile($modifiedAst);
-        
+
         return $next($newCode);
     }
 }
