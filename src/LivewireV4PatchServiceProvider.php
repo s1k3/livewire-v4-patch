@@ -13,9 +13,9 @@ class LivewireV4PatchServiceProvider extends ServiceProvider
             __DIR__.'/config/laravel-v4-patch.php' => config_path('laravel-v4-patch.php'),
         ]);
 
-         if ($this->app->runningInConsole()) {
+        if ($this->app->runningInConsole()) {
             $this->commands([
-                ConvertToMultiFileComponent::class
+                ConvertToMultiFileComponent::class,
             ]);
         }
 
