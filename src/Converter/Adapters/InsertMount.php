@@ -3,30 +3,87 @@
 namespace LivewireV4\Converter\Adapters;
 
 use Closure;
+use PhpParser\ParserFactory;
+use PhpParser\NodeTraverser;
+use PhpParser\NodeFinder;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\BuilderFactory;
+use PhpParser\Node\Stmt\Property;
+use PhpParser\Node;
+use PhpParser\PrettyPrinter\Standard;
+use PhpParser\Node\Stmt\Class_;
+
 
 class InsertMount
 {
-    public function __invoke(string $content, Closure $next) : string
+    public function __invoke(string $content, Closure $next): string
     {
-    
-        if(str($content)->contains('mount')){
+
+        if(!str()->of($content)->contains("<?php")){
+            $content = "<?php $content";
+        }
+
+        $parser = (new ParserFactory())->createForHostVersion();
+
+        $ast = $parser->parse($content);
+
+
+        $nodeFinder = new NodeFinder();
+        
+        $existingMount = $nodeFinder->findFirst($ast, function(Node $node) {
+            return $node instanceof ClassMethod && $node->name->name === 'mount';
+        });
+        
+        if ($existingMount) {
             return $next($content);
         }
 
-        $mountFunction = <<<'TEXT'
-            public function mount()
+        $builder = new BuilderFactory();
+        
+        $mountMethod = $builder->method('mount')
+            ->makePublic()
+            ->addStmts([])
+            ->getNode();
+
+        $traverser = new NodeTraverser();
+        $traverser->addVisitor(new class($mountMethod) extends \PhpParser\NodeVisitorAbstract {
+            private $mountMethod;
+            
+            public function __construct($mountMethod)
             {
-                
+                $this->mountMethod = $mountMethod;
             }
+            
+            public function enterNode(Node $node) {
+                if ($node instanceof Class_) {
 
-            public function render()
+                    $properties = [];
+                    $otherStmts = [];
 
-        TEXT;
+                    foreach ($node->stmts as $stmt) {
 
-        $nextPassable = str()->of($content)
-            ->replace("public function render()", $mountFunction)
-            ->toString();
+                        match(true){
+                            $stmt instanceof Property => $properties[] = $stmt,
+                            default => $otherStmts[] = $stmt
+                        };
 
-        return $next($nextPassable);
+                    }
+
+                    $node->stmts = [
+                        ... $properties,
+                        $this->mountMethod,
+                        ... $otherStmts
+                    ];
+                }
+                return $node;
+            }
+        });
+
+        $modifiedAst = $traverser->traverse($ast);
+        
+        $prettyPrinter = new Standard();
+        $newCode = $prettyPrinter->prettyPrintFile($modifiedAst);
+        
+        return $next($newCode);
     }
 }

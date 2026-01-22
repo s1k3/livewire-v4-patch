@@ -7,6 +7,7 @@ use PhpParser\ParserFactory;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\NodeFinder;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
@@ -22,13 +23,20 @@ class RemoveRender
 
         $traverser = new NodeTraverser();
         $traverser->addVisitor(new class extends NodeVisitorAbstract {
-            
+            public function leaveNode(Node $node) {
+                if ($node instanceof Class_) {
 
-            public function enterNode(Node $node) {
-                if ($node instanceof ClassMethod && $node->name->name === 'render') {
-                    return false;
+                    $node->stmts = array_filter($node->stmts, function($stmt) {
+                        if ($stmt instanceof ClassMethod && $stmt->name->name === 'render') {
+                            return false;
+                        }
+                        return true; 
+                    });
+                    
+                    $node->stmts = array_values($node->stmts);
                 }
-                return true;
+                
+                return $node;
             }
         });
 

@@ -10,7 +10,6 @@ use PhpParser\Node;
 use PhpParser\NodeFinder;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
-use PhpParser\PrettyPrinter;
 use PhpParser\PrettyPrinter\Standard;
 
 use function Livewire\str;
@@ -21,8 +20,14 @@ class MoveCodeToMount
 
     public function __invoke(string $content, Closure $next) : string
     {
+        
+        if(!str()->of($content)->contains("<?php")){
+            $content = "<?php $content";
+        }
+
         $parser = (new ParserFactory())->createForHostVersion();
-        $ast = $parser->parse("<?php " . str()->of($content)->replace("\n", "")->trim()->toString());
+        
+        $ast = $parser->parse($content);
 
         $traverser = new NodeTraverser();
 
@@ -42,7 +47,7 @@ class MoveCodeToMount
         if ($renderMethod && $renderMethod->stmts) {
             foreach ($renderMethod->stmts as $stmt) {
                 if ($stmt instanceof Return_) {
-                    continue; // Skip return statement
+                    continue; 
                 }
                 $injectedStatements[] = $stmt;
             }
@@ -65,12 +70,13 @@ class MoveCodeToMount
                 }
                 return $node;
             }
+            
         });
 
         $modifiedAst = $traverser->traverse($ast);
 
-        // Output the modified code
-        $prettyPrinter = new PrettyPrinter\Standard();
+        $prettyPrinter = new Standard();
+
         $newCode = $prettyPrinter->prettyPrintFile($modifiedAst);
 
         return $next($newCode);
