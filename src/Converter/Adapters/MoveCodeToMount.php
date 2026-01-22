@@ -7,48 +7,66 @@ use PhpParser\ParserFactory;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 use PhpParser\Node;
+use PhpParser\NodeFinder;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Return_;
 use PhpParser\PrettyPrinter;
+use PhpParser\PrettyPrinter\Standard;
+
+use function Livewire\str;
 
 class MoveCodeToMount
 {
+
+
     public function __invoke(string $content, Closure $next) : string
     {
-        // Parse the code - FIXED HERE
-        $parser = (new ParserFactory)->createForHostVersion();
-        $ast = $parser->parse($content);
+        $parser = (new ParserFactory())->createForHostVersion();
+        $ast = $parser->parse("<?php " . str()->of($content)->replace("\n", "")->trim()->toString());
 
-        // Create a visitor to modify the mount method
         $traverser = new NodeTraverser();
-        dd($traverser);
-        $traverser->addVisitor(new class extends NodeVisitorAbstract {
+
+        $nodeFinder = new NodeFinder();
+
+        $prettyPrinter = new Standard();
+
+        $injectedStatements = [];
+
+        $renderMethod = $nodeFinder->findFirst($ast, function($node) {
+            if ($node instanceof ClassMethod && $node->name->name === 'render') {
+                return true;
+            }
+            return false;
+        });
+
+        if ($renderMethod && $renderMethod->stmts) {
+            foreach ($renderMethod->stmts as $stmt) {
+                if ($stmt instanceof Return_) {
+                    continue; // Skip return statement
+                }
+                $injectedStatements[] = $stmt;
+            }
+        }
+
+
+
+        $traverser->addVisitor(new class($injectedStatements) extends NodeVisitorAbstract {
+            
+            private array $statementsToInject;
+            
+            public function __construct(array $statementsToInject)
+            {
+                $this->statementsToInject = $statementsToInject;
+            }
+
             public function enterNode(Node $node) {
                 if ($node instanceof ClassMethod && $node->name->name === 'mount') {
-                    // Parse the new code into AST nodes
-                    $parser = (new ParserFactory)->createForHostVersion(); // FIXED HERE
-                    
-                    $newCode = <<<'CODE'
-                    // Injected via LivewireV4 Converter
-                    $this->userId = auth()->id();
-                    \Log::info("Mount called for user: " . auth()->id());
-                    CODE;
-                    
-                    try {
-                        $newStatements = $parser->parse('<?php ' . $newCode);
-                        
-                        // Insert at the beginning of the method body
-                        if ($newStatements) {
-                            array_unshift($node->stmts, ...$newStatements);
-                        }
-                    } catch (\Exception $e) {
-                        // Handle parse errors gracefully
-                    }
+                    array_push($node->stmts, ...$this->statementsToInject);
                 }
                 return $node;
             }
         });
 
-        // Apply the transformations
         $modifiedAst = $traverser->traverse($ast);
 
         // Output the modified code
@@ -58,3 +76,4 @@ class MoveCodeToMount
         return $next($newCode);
     }
 }
+

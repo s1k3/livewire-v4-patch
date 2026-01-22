@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Pipeline;
 use Illuminate\Support\Facades\File;
 use LivewireV4\Converter\Adapters\ClassNameRemover;
 use LivewireV4\Converter\Adapters\InsertMount;
-use LivewireV4\Converter\Adapters\ModifyRender;
+use LivewireV4\Converter\Adapters\RemoveRender;
 use LivewireV4\Converter\Adapters\MoveCodeToMount;
 use LivewireV4\Converter\Adapters\NamespaceRemover;
 use LivewireV4\Interface\Instance;
@@ -33,9 +33,8 @@ class ConversionManager implements Instance
             ClassNameRemover::class,
             NamespaceRemover::class,
             InsertMount::class,
-            ModifyRender::class,
-           MoveCodeToMount::class
-
+            MoveCodeToMount::class,
+            RemoveRender::class
         ])
         ->thenReturn();
 
