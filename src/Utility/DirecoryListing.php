@@ -24,14 +24,14 @@ class DirecoryListing implements Instance
     public function fileListings(): array
     {
         if ($this->filePath === null) {
-            $this->filePath = config('laravel-v4-patch.component_path');
+            $this->filePath = config('livewire-v4-patch.class_component_path');
         }
 
         $files = File::allFiles($this->filePath);
 
         $output = [];
         foreach ($files as $file) {
-            if (str()->of($file->getPath())->contains(config(['laravel-v4-patch.excluded_directories']))) {
+            if (str()->of($file->getPath())->contains(config(['livewire-v4-patch.excluded_directories']))) {
                 continue;
             }
 

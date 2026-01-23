@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Pipeline;
 use LivewireV4\Converter\Adapters\ClassNameRemover;
 use LivewireV4\Converter\Adapters\InsertMount;
+use LivewireV4\Converter\Adapters\LazyAttributeModify;
 use LivewireV4\Converter\Adapters\MoveCodeToMount;
 use LivewireV4\Converter\Adapters\NamespaceRemover;
 use LivewireV4\Converter\Adapters\RemoveRender;
@@ -20,31 +21,28 @@ class ConversionManager implements Instance
         return new static;
     }
 
-    public function path($filePath)
+    public function path($filePath): static
     {
         $this->filePath = $filePath;
 
         return $this;
     }
 
-    public function convert()
+    public function convert(): string
     {
 
-        $content = Pipeline::send(
+        return Pipeline::send(
             passable: File::get($this->filePath)
         )
-            ->through([
-                ClassNameRemover::class,
-                NamespaceRemover::class,
-                InsertMount::class,
-                MoveCodeToMount::class,
-                RemoveRender::class,
-            ])
-            ->thenReturn();
-
-        $componentName = str()->of(File::name($this->filePath))->kebab()->toString();
-
-        dd($content, $componentName);
+        ->through([
+            ClassNameRemover::class,
+            LazyAttributeModify::class,
+            NamespaceRemover::class,
+            InsertMount::class,
+            MoveCodeToMount::class,
+            RemoveRender::class,
+        ])
+        ->thenReturn();
 
     }
 }

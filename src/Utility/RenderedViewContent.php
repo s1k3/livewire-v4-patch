@@ -42,6 +42,14 @@ class RenderedViewContent implements Instance
             ->append('.blade.php')
             ->toString();
 
-        return File::get(resource_path("views/{$viewFile}"));
+        $viewFilePath = resource_path("views/{$viewFile}");
+
+
+        if(! File::exists($viewFilePath)) {
+            //create a new Empty file
+            File::put($viewFilePath, "");
+        }
+
+        return File::get($viewFilePath);
     }
 }
