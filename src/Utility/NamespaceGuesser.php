@@ -34,7 +34,7 @@ class NamespaceGuesser implements Instance
 
     public function name(string $name): static
     {
-        $this->fileName = match(true){
+        $this->fileName = match (true) {
             str()->of($name)->endswith('.php') => $name,
             default => "{$name}.php"
         };

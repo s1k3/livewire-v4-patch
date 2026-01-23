@@ -44,10 +44,9 @@ class RenderedViewContent implements Instance
 
         $viewFilePath = resource_path("views/{$viewFile}");
 
-
-        if(! File::exists($viewFilePath)) {
-            //create a new Empty file
-            File::put($viewFilePath, "");
+        if (! File::exists($viewFilePath)) {
+            // create a new Empty file
+            File::put($viewFilePath, '');
         }
 
         return File::get($viewFilePath);

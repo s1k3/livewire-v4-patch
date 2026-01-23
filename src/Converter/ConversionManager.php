@@ -34,15 +34,15 @@ class ConversionManager implements Instance
         return Pipeline::send(
             passable: File::get($this->filePath)
         )
-        ->through([
-            ClassNameRemover::class,
-            LazyAttributeModify::class,
-            NamespaceRemover::class,
-            InsertMount::class,
-            MoveCodeToMount::class,
-            RemoveRender::class,
-        ])
-        ->thenReturn();
+            ->through([
+                ClassNameRemover::class,
+                LazyAttributeModify::class,
+                NamespaceRemover::class,
+                InsertMount::class,
+                MoveCodeToMount::class,
+                RemoveRender::class,
+            ])
+            ->thenReturn();
 
     }
 }

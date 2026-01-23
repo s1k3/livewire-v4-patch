@@ -25,5 +25,4 @@ class LivewireV4PatchServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/config/livewire-v4-patch.php', 'livewire-v4-patch');
     }
-
 }
