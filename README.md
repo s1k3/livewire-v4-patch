@@ -69,7 +69,7 @@ php artisan convert-class-to:mfc Posts
 To keep the old component files and view files **--keep-class-files** option needs to be used. 
 
 ```php
-php artisan convert-class-to:mfc Ballots --keep-class-files
+php artisan convert-class-to:mfc <path/of/the/file/directory> --keep-class-files
 ```
 
 In that case, **class and view files needs to be removed manually**
