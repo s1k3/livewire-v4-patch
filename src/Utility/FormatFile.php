@@ -28,8 +28,8 @@ class FormatFile implements InterfaceInstance
 
     public function name(string $fileName): static
     {
-        $this->fileName = match(true){
-            str()->of($fileName)->endsWith(".php") => $fileName,
+        $this->fileName = match (true) {
+            str()->of($fileName)->endsWith('.php') => $fileName,
             default => "{$fileName}.php"
         };
 
