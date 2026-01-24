@@ -23,7 +23,7 @@ php artisan vendor:publish --provider="LivewireV4\\LivewireV4PatchServiceProvide
 
 
 
-** Configuration Options **
+**Configuration Options**
 
 | Key	| Type | Default | Description |
 |--------|-----|--------|------------|
@@ -45,7 +45,7 @@ php artisan vendor:publish --provider="LivewireV4\\LivewireV4PatchServiceProvide
 php artisan convert-class-to:mfc <Path/of/the/component.php>
 ```
 
-All paths are being calculated from ** class_component_path **. For example if your compoent is in ** app/Livewire/Posts/Create.php **
+All paths are being calculated from **class_component_path**. For example if your compoent is in **app/Livewire/Posts/Create.php**
 then your command will be 
 
 ``` php
