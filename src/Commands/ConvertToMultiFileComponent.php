@@ -16,7 +16,7 @@ class ConvertToMultiFileComponent extends Command
     protected $signature = 'convert-class-to:mfc 
                             {path : Path to the component or directory}
                             {--keep-class-files : Keep original class files after conversion}';
-    
+
     protected $description = 'Convert Livewire class components to MFC';
 
     public function handle(): void
@@ -90,8 +90,8 @@ class ConvertToMultiFileComponent extends Command
 
         $this->info('DONE !!!');
 
-        //if user wants to keep the old class files
-        if(!$this->option('keep-class-files')){
+        // if user wants to keep the old class files
+        if (! $this->option('keep-class-files')) {
             $viewFilePath = ViewFilePath::make()->path($fullPath)->viewFilePath();
             File::delete($fullPath);
             File::delete($viewFilePath);
