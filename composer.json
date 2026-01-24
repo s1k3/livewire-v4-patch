@@ -3,7 +3,7 @@
     "description": "Livewire V4 patch for class component to mfc conversion and incomplete livewire tags",
     "type": "library",
     "minimum-stability": "dev",
-    "license": "BSD",
+    "license": "MIT",
     "keywords": [
         "livewire",
         "v4",
