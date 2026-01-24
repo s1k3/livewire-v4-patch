@@ -64,6 +64,23 @@ And you want to convert them all just pass the folder name in the command
 php artisan convert-class-to:mfc Posts
 ```
 
+***Please Note that this will delete old class component files and view files***
+
+To keep the old component files and view files **--keep-class-files** option needs to be used. 
+
+```php
+php artisan convert-class-to:mfc Ballots --keep-class-files
+```
+
+In that case, **class and view files needs to be removed manually**
+
+
+After Conversions you might have to clear all the caches and autoload everything.
+
+``` php
+php artisan optimize:clear
+```
+
 After Conversions you might have to clear all the caches and autoload everything.
 
 ``` php

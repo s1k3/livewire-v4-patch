@@ -6,8 +6,10 @@
     "license": "MIT",
     "keywords": [
         "livewire",
-        "v4",
-        "patch"
+        "class",
+        "component",
+        "mfc",
+        "convert"
     ],
     "authors": [
         {
