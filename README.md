@@ -27,13 +27,15 @@ php artisan vendor:publish --provider="LivewireV4\\LivewireV4PatchServiceProvide
 
 | Key	Type | Default | Value | Description |
 |--------|-------------|------------|
-|excluded_directories	|array	| [] |	Array of directory names to exclude from Livewire component generation|
-|class_component_path	|string	| base_path('app/Livewire')	|Path where Livewire class components are stored|
-|mfc_component_path	    | string	| resource_path('views/components')	Path for Model-Focused Components (MFC)|
-|create_js	boolean	    | false	| Whether to create JavaScript files alongside components|
-|create_css	boolean	    | false	| Whether to create CSS files alongside components|
-|global_css	|boolean    |false	    | Whether to use global CSS instead of component-specific CSS|
-|emoji	| boolean	    | false	| Whether to use emoji in generated component output|
+| excluded_directories	|array	| [] |	Array of directory names to exclude from Livewire component generation|
+| class_component_path	|string	| base_path('app/Livewire')	|Path where Livewire class components are stored|
+| mfc_component_path | string	| resource_path('views/components')	Path for Model-Focused Components (MFC)|
+| create_js	| boolean | false | Whether to create JavaScript files alongside components|
+| create_css	| boolean | false	| Whether to create CSS files alongside components|
+| global_css	|boolean    |false	    | Whether to use global CSS instead of component-specific CSS|
+| emoji	| boolean	    | false	| Whether to use emoji in generated component output|
+
+
 
 
 ## Component Conversions Command
