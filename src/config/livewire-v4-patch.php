@@ -7,5 +7,5 @@ return [
     'create_js' => false,
     'create_css' => false,
     'global_css' => false,
-    'emoji' => false
+    'emoji' => false,
 ];

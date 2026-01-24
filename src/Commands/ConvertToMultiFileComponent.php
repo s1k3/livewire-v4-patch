@@ -22,8 +22,9 @@ class ConvertToMultiFileComponent extends Command
         $path = $this->argument('path');
         $fullPath = config('livewire-v4-patch.class_component_path').DIRECTORY_SEPARATOR.$path;
 
-        if(! File::exists($fullPath)) {
+        if (! File::exists($fullPath)) {
             $this->error("$fullPath Does Not exists");
+
             return;
         }
 
@@ -42,7 +43,7 @@ class ConvertToMultiFileComponent extends Command
     {
         $mfcComponentPath = config('livewire-v4-patch.mfc_component_path');
 
-        $emoji = match(true){
+        $emoji = match (true) {
             config('livewire-v4-patch.emoji') => '⚡',
             default => ''
         };
@@ -53,7 +54,7 @@ class ConvertToMultiFileComponent extends Command
             array : [
                 $mfcComponentPath,
                 $componentDirectory,
-                $convertedComponentName
+                $convertedComponentName,
             ],
             glue: DIRECTORY_SEPARATOR
         );
@@ -73,16 +74,16 @@ class ConvertToMultiFileComponent extends Command
         FormatFile::make()->path($convertedComponentPath)->name($convertedComponentName)->format();
         File::put($convertedComponentPath.DIRECTORY_SEPARATOR.$emoji.$convertedComponentName.'.blade.php', $viewContent);
 
-        if(config('livewire-v4-patch.create_js')){
-            File::put($convertedComponentPath.DIRECTORY_SEPARATOR.$convertedComponentName.'.js', "");
+        if (config('livewire-v4-patch.create_js')) {
+            File::put($convertedComponentPath.DIRECTORY_SEPARATOR.$convertedComponentName.'.js', '');
         }
 
-        if(config('livewire-v4-patch.create_css')){
-            File::put($convertedComponentPath.DIRECTORY_SEPARATOR.$convertedComponentName.'.css', "");
+        if (config('livewire-v4-patch.create_css')) {
+            File::put($convertedComponentPath.DIRECTORY_SEPARATOR.$convertedComponentName.'.css', '');
         }
 
-        if(config('livewire-v4-patch.global_css')){
-            File::put($convertedComponentPath.DIRECTORY_SEPARATOR.$convertedComponentName.'.global.css', "");
+        if (config('livewire-v4-patch.global_css')) {
+            File::put($convertedComponentPath.DIRECTORY_SEPARATOR.$convertedComponentName.'.global.css', '');
         }
 
         $this->info('DONE !!!');
