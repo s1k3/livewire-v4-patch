@@ -30,5 +30,8 @@
                 "LivewireV4\\LivewireV4PatchServiceProvider"
             ]
         }
+    },
+    "require-dev": {
+        "pestphp/pest-plugin-laravel": ">=4.0"
     }
 }

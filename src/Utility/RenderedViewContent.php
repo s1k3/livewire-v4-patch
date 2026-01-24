@@ -28,27 +28,6 @@ class RenderedViewContent implements Instance
             throw new Exception('File path is not set.');
         }
 
-        $content = File::get($this->filePath);
-
-        $viewFile = str()->of($content)
-            ->after('render()')
-            ->after('{')
-            ->before('}')
-            ->after('view(')
-            ->before(')')
-            ->trim()
-            ->replace("'", '')
-            ->replace('.', '/')
-            ->append('.blade.php')
-            ->toString();
-
-        $viewFilePath = resource_path("views/{$viewFile}");
-
-        if (! File::exists($viewFilePath)) {
-            // create a new Empty file
-            File::put($viewFilePath, '');
-        }
-
-        return File::get($viewFilePath);
+        return ViewFilePath::make()->path($this->filePath)->viewFilePath();
     }
 }
