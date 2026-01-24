@@ -8,7 +8,7 @@ This package will work with PHP >= 8.2 with CURL enabled.
 
 To install this library follow the following steps:
 ```bash
- composer require s1k3/livewire-v4-patch
+ composer require --dev s1k3/livewire-v4-patch
 ```
 
 
