@@ -20,7 +20,7 @@ To install this library follow the following steps:
 ``` php
 php artisan vendor:publish --provider="LivewireV4\\LivewireV4PatchServiceProvider"
 ```
-``` php
+
 
 
 ** Configuration Options **
