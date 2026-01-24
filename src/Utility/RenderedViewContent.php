@@ -3,6 +3,7 @@
 namespace LivewireV4\Utility;
 
 use Exception;
+use Illuminate\Support\Facades\File;
 use LivewireV4\Interface\Instance;
 
 class RenderedViewContent implements Instance
@@ -27,6 +28,6 @@ class RenderedViewContent implements Instance
             throw new Exception('File path is not set.');
         }
 
-        return ViewFilePath::make()->path($this->filePath)->viewFilePath();
+        return File::get(ViewFilePath::make()->path($this->filePath)->viewFilePath());
     }
 }
