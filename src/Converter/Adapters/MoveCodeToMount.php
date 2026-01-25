@@ -19,10 +19,6 @@ class MoveCodeToMount
     public function __invoke(string $content, Closure $next): string
     {
 
-        if (! str()->of($content)->contains('<?php')) {
-            $content = "<?php $content";
-        }
-
         $parser = (new ParserFactory)->createForHostVersion();
 
         $ast = $parser->parse($content);

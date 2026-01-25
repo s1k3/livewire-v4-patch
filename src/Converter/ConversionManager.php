@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Pipeline;
 use LivewireV4\Converter\Adapters\ClassNameRemover;
 use LivewireV4\Converter\Adapters\InsertMount;
-use LivewireV4\Converter\Adapters\LazyAttributeModify;
 use LivewireV4\Converter\Adapters\MoveCodeToMount;
 use LivewireV4\Converter\Adapters\NamespaceRemover;
 use LivewireV4\Converter\Adapters\RemoveRender;
@@ -36,7 +35,6 @@ class ConversionManager implements Instance
         )
             ->through([
                 ClassNameRemover::class,
-                LazyAttributeModify::class,
                 NamespaceRemover::class,
                 InsertMount::class,
                 MoveCodeToMount::class,

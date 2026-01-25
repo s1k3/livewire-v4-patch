@@ -9,16 +9,18 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 use PhpParser\ParserFactory;
-use PhpParser\PrettyPrinter;
+use PhpParser\PrettyPrinter\Standard;
 
 class RemoveRender
 {
     public function __invoke(string $content, Closure $next): string
     {
         $parser = (new ParserFactory)->createForHostVersion();
+
         $ast = $parser->parse($content);
 
         $traverser = new NodeTraverser;
+
         $traverser->addVisitor(new class extends NodeVisitorAbstract
         {
             public function leaveNode(Node $node)
@@ -42,8 +44,8 @@ class RemoveRender
 
         $modifiedAst = $traverser->traverse($ast);
 
-        // Output the modified code
-        $prettyPrinter = new PrettyPrinter\Standard;
+        $prettyPrinter = new Standard;
+        
         $newCode = $prettyPrinter->prettyPrintFile($modifiedAst);
 
         return $next($newCode);

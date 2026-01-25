@@ -18,9 +18,6 @@ class InsertMount
     public function __invoke(string $content, Closure $next): string
     {
 
-        if (! str()->of($content)->contains('<?php')) {
-            $content = "<?php $content";
-        }
 
         $parser = (new ParserFactory)->createForHostVersion();
 
@@ -84,6 +81,7 @@ class InsertMount
 
         $prettyPrinter = new Standard;
         $newCode = $prettyPrinter->prettyPrintFile($modifiedAst);
+
 
         return $next($newCode);
     }
