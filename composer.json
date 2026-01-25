@@ -1,6 +1,6 @@
 {
     "name": "s1k3/livewire-v4-patch",
-    "description": "This Package provides comprehensive tools for converting traditional Livewire class components to Model-Focused Components (MFC) in Livewire v4",
+    "description": "This Package provides comprehensive tools for converting traditional Livewire class components to Multi-File Components (MFC) in Livewire v4",
     "type": "library",
     "minimum-stability": "dev",
     "license": "MIT",
