@@ -12,8 +12,6 @@ use PhpParser\NodeVisitorAbstract;
 use PhpParser\ParserFactory;
 use PhpParser\PrettyPrinter\Standard;
 
-use function Livewire\str;
-
 class MoveCodeToMount
 {
     public function __invoke(string $content, Closure $next): string

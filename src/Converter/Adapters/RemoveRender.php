@@ -45,7 +45,7 @@ class RemoveRender
         $modifiedAst = $traverser->traverse($ast);
 
         $prettyPrinter = new Standard;
-        
+
         $newCode = $prettyPrinter->prettyPrintFile($modifiedAst);
 
         return $next($newCode);

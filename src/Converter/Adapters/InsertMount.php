@@ -18,7 +18,6 @@ class InsertMount
     public function __invoke(string $content, Closure $next): string
     {
 
-
         $parser = (new ParserFactory)->createForHostVersion();
 
         $ast = $parser->parse($content);
@@ -81,7 +80,6 @@ class InsertMount
 
         $prettyPrinter = new Standard;
         $newCode = $prettyPrinter->prettyPrintFile($modifiedAst);
-
 
         return $next($newCode);
     }
