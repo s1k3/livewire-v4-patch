@@ -94,3 +94,9 @@ composer dump-autoload
 ``` bash
 composer install --optimize-autoloader
 ```
+If those command still doesn't work then delete **composer.lock** and **vendor/** directory after that 
+install all the packages
+
+``` bash
+composer install
+```
