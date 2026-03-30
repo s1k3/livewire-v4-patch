@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitorAbstract;
 use PhpParser\ParserFactory;
 use PhpParser\PrettyPrinter\Standard;
 
@@ -40,7 +41,7 @@ class InsertMount
             ->getNode();
 
         $traverser = new NodeTraverser;
-        $traverser->addVisitor(new class($mountMethod) extends \PhpParser\NodeVisitorAbstract
+        $traverser->addVisitor(new class($mountMethod) extends NodeVisitorAbstract
         {
             private $mountMethod;
 
