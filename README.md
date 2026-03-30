@@ -74,6 +74,11 @@ php artisan convert-class-to:mfc <path/of/the/file/directory> --keep-class-files
 
 In that case, **class and view files needs to be removed manually**
 
+By deafult, every file created will be formatted using pint but in case if you want to disable that you need to use this flag **--without-pint-formatting**
+
+```php
+php artisan convert-class-to:mfc <path/of/the/file/directory> --without-pint-formatting
+```
 
 After Conversions you might have to clear all the caches and autoload everything.
 
