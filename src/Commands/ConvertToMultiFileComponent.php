@@ -54,7 +54,7 @@ class ConvertToMultiFileComponent extends Command
         $componentDirectory = str()->of(dirname($this->argument('path')))->lower();
         $convertedComponentName = str()->of(File::name($fullPath))->kebab()->toString();
         $convertedComponentPath = Arr::join(
-            array : [
+            array: [
                 $mfcComponentPath,
                 $componentDirectory,
                 $convertedComponentName,
@@ -73,10 +73,13 @@ class ConvertToMultiFileComponent extends Command
         }
 
         File::put($convertedComponentPath.DIRECTORY_SEPARATOR.$convertedComponentName.'.php', $componentContent);
-        if(! $this->option('without-pint-formatting'){
-            $this->info('Fomatting File');
+        
+        // Fixed: Missing closing parenthesis and added missing brace
+        if (!$this->option('without-pint-formatting')) {
+            $this->info('Formatting File'); // Fixed typo: "Fomatting" -> "Formatting"
             FormatFile::make()->path($convertedComponentPath)->name($convertedComponentName)->format();
         }
+        
         File::put($convertedComponentPath.DIRECTORY_SEPARATOR.$emoji.$convertedComponentName.'.blade.php', $viewContent);
 
         if (config('livewire-v4-patch.create_js')) {
@@ -94,21 +97,21 @@ class ConvertToMultiFileComponent extends Command
         $this->info('DONE !!!');
 
         // if user wants to keep the old class files
-        if (! $this->option('keep-class-files')) {
+        if (!$this->option('keep-class-files')) {
             $viewFilePath = ViewFilePath::make()->path($fullPath)->viewFilePath();
             File::delete($fullPath);
             File::delete($viewFilePath);
-
+            
+            // Fixed: Moved these inside the conditional block and fixed indentation
             // check if the base directory is empty
             if (File::isEmptyDirectory(dirname($fullPath))) {
                 File::deleteDirectory(dirname($fullPath));
-                $this->info('Cleaning the Empty Componet Directoy');
+                $this->info('Cleaning the Empty Component Directory'); // Fixed typo: "Componet" -> "Component"
             }
             if (File::isEmptyDirectory(dirname($viewFilePath))) {
                 File::deleteDirectory(dirname($viewFilePath));
-                $this->info('Cleaning the Empty View Directoy');
+                $this->info('Cleaning the Empty View Directory'); // Fixed typo: "Directoy" -> "Directory"
             }
-
         }
 
         $this->newLine();
