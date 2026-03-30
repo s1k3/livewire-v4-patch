@@ -15,6 +15,7 @@ class ConvertToMultiFileComponent extends Command
 {
     protected $signature = 'convert-class-to:mfc 
                             {path : Path to the component or directory}
+                            {--without-pint-formatting : Without Pint Formatting}
                             {--keep-class-files : Keep original class files after conversion}';
 
     protected $description = 'Convert Livewire class components to MFC';
@@ -72,8 +73,10 @@ class ConvertToMultiFileComponent extends Command
         }
 
         File::put($convertedComponentPath.DIRECTORY_SEPARATOR.$convertedComponentName.'.php', $componentContent);
-        $this->info('Fomatting File');
-        FormatFile::make()->path($convertedComponentPath)->name($convertedComponentName)->format();
+        if(! $this->option('without-pint-formatting'){
+            $this->info('Fomatting File');
+            FormatFile::make()->path($convertedComponentPath)->name($convertedComponentName)->format();
+        }
         File::put($convertedComponentPath.DIRECTORY_SEPARATOR.$emoji.$convertedComponentName.'.blade.php', $viewContent);
 
         if (config('livewire-v4-patch.create_js')) {
