@@ -51,7 +51,9 @@ class ConvertToMultiFileComponent extends Command
             default => ''
         };
 
-        $componentDirectory = str()->of(dirname($this->argument('path')))->lower();
+        $classComponentBasePath = config('livewire-v4-patch.class_component_path');
+        $relativeDir = ltrim(str_replace($classComponentBasePath, '', dirname($fullPath)), DIRECTORY_SEPARATOR);
+        $componentDirectory = str()->of($relativeDir)->lower();
         $convertedComponentName = str()->of(File::name($fullPath))->kebab()->toString();
         $convertedComponentPath = Arr::join(
             array: [
